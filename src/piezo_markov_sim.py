@@ -302,7 +302,7 @@ def do_timestep_post(state_array, sampling_interval, tension, timepoint, pokesiz
   
   Inputs: 
     state_array: the first array that has channels scattered throughout in different states. Only used for the first timesetp
-    sampling_interval: How seconds per iteration. To prevent oscillations, needs to be at minimum 1/10**5 for tensions 1-5mN/m, 1/10**6 for tension 6-7Mn/N, and 1/10**7 for tension 8mN/m 
+    sampling_interval: How seconds per iteration. Curr 
     tension: the absolute tension that channels will be exposed to in the tension clamped region of the membrane
     timepoint:time post stimuli onset
     poke_size: the radius of the tension clamped stimuli
@@ -363,11 +363,11 @@ tension = 5
 x_size = 550
 y_size = 550
 fps = 10**5
-equilibration_time = int(0.01 * fps)
-time = int(0.05 * fps) # in frames. Will change based on fps
 diffusion_coeff_list = [0.0001, 240, 2400, 24000]
 
 ##############################################################################################
+equilibration_time = int(0.01 * fps)
+time = int(0.05 * fps) # in frames. Will change based on fps
 equil_probabilities =  generate_transition_matrix(0, 1.4, 0.8, 1/fps)
 equil_values_array = equilibriumStates(equil_probabilities)
 equil_c = equil_values_array[0, 0]
@@ -424,11 +424,11 @@ for diffusionx in range(len(diffusion_coeff_list)):
         inactive2_list.append(inactive2_sum)
         state_array = s_time
         timepoint += sampling_interval
-    print(len(channel_locs))
-    open_list = [x/3025 for x in open_list]
-    closed_list = [x/3025 for x in closed_list]
-    inactive_list = [x/3025 for x in inactive_list]
-    inactive2_list = [x/3025 for x in inactive2_list]
+    channel_num = (len(channel_locs[0]))
+    open_list = [x/channel_num for x in open_list]
+    closed_list = [x/channel_num for x in closed_list]
+    inactive_list = [x/channel_num for x in inactive_list]
+    inactive2_list = [x/channel_num for x in inactive2_list]
     plt.plot(time_list, open_list)
     plt.plot(time_list, closed_list)
     plt.plot(time_list, inactive_list)
